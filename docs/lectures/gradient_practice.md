@@ -76,7 +76,7 @@ Here are some examples of functions and their gradients:
 
 
 
-## Application to Multiple Linear Regression Sqaured Loss
+## Application to Multiple Linear Regression Squared Loss
 
 Now that we have some basic identities, let's try to compute the gradient of the following function from $\R^d \rightarrow \R$: 
 
@@ -85,8 +85,6 @@ $$ L(\vec{\beta}) = \|\vec{y} - X\vec{\beta}\|_2^2$$.
 Here $\vec{y}$ is a length $n$ column vector, $X$ is our $n \times d$ data matrix, $\beta$ is a column vector of $d$ parameters and $L$ is the squared loss. 
 
 **Question:** What the gradient $\nabla L(\vec{\beta})$?
-
-
 
 **Solution:**
 
@@ -115,3 +113,22 @@ Putting it all together, we get that
 $$\nabla L(\vec{\beta}) = 0 + 2X^TX\vec{\beta} - 2 X^T\vec{y} $$
 
 $$\nabla L(\vec{\beta}) = 2X^T(X\vec{\beta} - \vec{y})$$
+
+
+
+## Another Approach via Chain Rule
+
+Let $g(\vec{z}) = \|\vec{y} -\vec{z}\|^2_2$ where $\vec{y}$ is a fixed vector. 
+
+$\frac{\partial g}{\partial z_i} = \frac{\partial g}{\partial z_k} \sum_{i=1}^n (y_i - z_i)^2 = \sum_{i=1}^n \frac{\partial g}{\partial z_k}  (y_i - z_i)^2 = \frac{\partial g}{\partial z_k} (y_k-z_k)^2$. 
+
+The last inequality follows from the fact that $\frac{\partial g}{\partial z_k}  (y_i - z_i)^2 = 0$ for all $i\neq k$. 
+
+Continuing, we have that: $\frac{\partial g}{\partial z_k} (y_k-z_k)^2 = -2(y_k-z_k)$
+
+We conclude that $\nabla g(\vec{z}) = -2(\vec{y} - \vec{z}) = 2(\vec{z} - \vec{y})$. 
+
+Now we can apply chain rule directly by noting that $L(\vec{\beta}) = \|\vec{y} - X\vec{\beta}\|_2^2 = g(X\vec{\beta})$. So we have that:
+$$
+\nabla L(\vec{\beta}) = X^T \nabla g(X\vec{\beta}) = X^T\cdot 2(X\vec{\beta} - y) = 2X^T(X\vec{\beta} - y) 
+$$
